@@ -262,17 +262,19 @@ export const STATES = [
 ];
 
 export const ICON_URL_PREFIX = "/assets/icons";
+export const PACKAGE_TYPE_ICON_PREFIX = "/assets/icons/packageTypeIcons";
+export const CARRIER_LOGO_PREFIX = "/assets/icons/carrierLogos";
 
 export const PackageTypes = [
   {
     id: 1,
-    image: `${ICON_URL_PREFIX}/Parcel.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/Parcel.png`,
     name: "Box or Rigid Packaging",
     description: "Any custom box or thick parcel",
   },
   {
     id: 2,
-    image: `${ICON_URL_PREFIX}/SoftEnvelope.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/SoftPack.png`,
     name: "Envelope, Padded Envelope, Poly Bag, Soft Pack, or Box in a Bag",
     description:
       "Measure & use the Length and Width of the Envelope before putting anything in it",
@@ -280,14 +282,14 @@ export const PackageTypes = [
   },
   {
     id: 3,
-    image: `${ICON_URL_PREFIX}/SmallFlatRateBox.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/SmallFlatRateBox.png`,
     name: "USPS Priority Mail Small Flat Rate Box",
     description: "Small Flat Rate Mailing Box only",
     predefined_package: "SmallFlatRateBox",
   },
   {
     id: 4,
-    image: `${ICON_URL_PREFIX}/MediumFlatRateBox.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/MediumFlatRateBox.png`,
     name: "USPS Priority Mail Medium Flat Rate Box",
     description:
       "Any Medium Flat Rate Box, including 1 (Top-Loading) and 2 (Side-Loading)",
@@ -295,7 +297,7 @@ export const PackageTypes = [
   },
   {
     id: 5,
-    image: `${ICON_URL_PREFIX}/LargeFlatRateBox.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/LargeFlatRateBox.png`,
     name: "USPS Priority Mail Large Flat Rate Box",
     description:
       "Any Large Flat Rate Box, including APO/FPO or Board Game Flat Rate Boxes",
@@ -303,77 +305,77 @@ export const PackageTypes = [
   },
   {
     id: 6,
-    image: `${ICON_URL_PREFIX}/FlatRateEnvelope.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/FlatRateEnvelope.png`,
     name: "USPS Priority Mail Flat Rate Envelope",
     description: "Non-padded Flat Rate Envelope including Small and Window",
     predefined_package: "FlatRateEnvelope",
   },
   {
     id: 7,
-    image: `${ICON_URL_PREFIX}/FlatRateLegalEnvelope.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/FlatRateLegalEnvelope.png`,
     name: "USPS Priority Mail Legal Flat Rate Envelope",
     description: "Priority Mail Legal Flat Rate Envelope",
     predefined_package: "FlatRateLegalEnvelope",
   },
   {
     id: 8,
-    image: `${ICON_URL_PREFIX}/FlatRatePaddedEnvelope.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/FlatRatePaddedEnvelope.png`,
     name: "USPS Priority Mail Padded Flat Rate Envelope",
     description: "Flat Rate-branded Padded Envelope only",
     predefined_package: "FlatRatePaddedEnvelope",
   },
   {
     id: 9,
-    image: `${ICON_URL_PREFIX}/ExpressFlatRateEnvelope.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/ExpressFlatRateEnvelope.png`,
     name: "USPS Priority Mail Express Flat Rate Envelope",
     description: "Express-branded non-padded only",
     predefined_package: "ExpressFlatRateEnvelope",
   },
   {
     id: 10,
-    image: `${ICON_URL_PREFIX}/ExpressFlatRateLegalEnvelope.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/ExpressFlatRateLegalEnvelope.png`,
     name: "USPS Priority Mail Express Legal Flat Rate Envelope",
     description: "Express-branded only",
     predefined_package: "ExpressFlatRateLegalEnvelope",
   },
   {
     id: 11,
-    image: `${ICON_URL_PREFIX}/ExpressFlatRatePaddedEnvelope.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/ExpressFlatRatePaddedEnvelope.png`,
     name: "USPS Priority Mail Express Padded Flat Rate Envelope",
     description: "Express-branded only",
     predefined_package: "ExpressFlatRatePaddedEnvelope",
   },
   {
     id: 12,
-    image: `${ICON_URL_PREFIX}/UPSExpressEnvelop.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/UPSExpressEnvelop.png`,
     name: "UPS Express Envelope",
     description: "UPS-branded Envelope for letter-sized documents",
     predefined_package: "UPSExpressEnvelop",
   },
   {
     id: 13,
-    image: `${ICON_URL_PREFIX}/UPSSmallExpressBox.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/UPSSmallExpressBox.png`,
     name: "UPS Small Express Box",
     description: "UPS-branded box for small-sized shipments",
     predefined_package: "SmallExpressBox",
   },
   {
     id: 14,
-    image: `${ICON_URL_PREFIX}/UPSMediumExpressBox.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/UPSMediumExpressBox.png`,
     name: "UPS Medium Express Box",
     description: "UPS-branded box for medium-sized shipments",
     predefined_package: "MediumExpressBox",
   },
   {
     id: 15,
-    image: `${ICON_URL_PREFIX}/UPSLargeExpressBox.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/UPSLargeExpressBox.png`,
     name: "UPS Large Express Box",
     description: "UPS-branded box for large-sized shipments",
     predefined_package: "LargeExpressBox",
   },
   {
     id: 16,
-    image: `${ICON_URL_PREFIX}/UPSExpressTube.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/UPSExpressTube.png`,
     name: "UPS Express Tube",
     description:
       "UPS-branded triangular box for rolled documents (blueprints, posters, etc.)",
@@ -381,13 +383,35 @@ export const PackageTypes = [
   },
   {
     id: 17,
-    image: `${ICON_URL_PREFIX}/UPSExpressPak.png`,
+    image: `${PACKAGE_TYPE_ICON_PREFIX}/UPSExpressPak.png`,
     name: "UPS Express Pak",
     description: "UPS-branded poly envelope",
     predefined_package: "Pak",
   },
 ];
 
+export const PackageContentTypes = [
+  {
+    id: 1,
+    key: "gift",
+    title: "Gift",
+    description:
+      "Only choose this option if it’s actually a gift… it will not reduce the chance of your recipient having to pay import duties!",
+  },
+  {
+    id: 2,
+    key: "merchandise",
+    title: "Merchandise",
+    description:
+      "Products that were purchased by your recipient; they will probably have to show a receipt proving the declared value is correct to receive the package.",
+  },
+  {
+    id: 3,
+    key: "documents",
+    title: "Documents",
+    description: "For contracts and other printed documents only.",
+  },
+];
 export const MAX_GIRTH_LENGTH = 165;
 export const MAX_WEIGHT = 150;
 

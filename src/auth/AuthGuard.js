@@ -4,7 +4,6 @@ import { Navigate, useLocation } from "react-router-dom";
 // components
 import { LoadingScreen } from "../components/loading-screen";
 //
-import Login from "../pages/auth/LoginPage";
 import { useSelector } from "react-redux";
 import { PATH_AUTH } from "../routes/paths";
 

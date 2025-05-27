@@ -6,22 +6,22 @@
   font-family: "ARRrrrialWeb";
   src: url("../public/assets/fonts/ARRrrrialWeb-Bold.woff2") format("woff2");
   font-weight: 700;
-  font-style: normal;
+  font-style: bold;
   font-display: swap;
 }
 
 @font-face {
   font-family: "ARRrrrialWeb";
   src: url("../public/assets/fonts/ARRrrrialWeb-Medium.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
+  font-weight: 500;
+  font-style: medium;
   font-display: swap;
 }
 
 @font-face {
   font-family: "ARRrrrialWeb";
   src: url("../public/assets/fonts/ARRrrrialWeb-Regular.woff2") format("woff2");
-  font-weight: 500;
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -30,7 +30,7 @@
   font-family: "ARRrrrmoji-Web";
   src: url("../public/assets/fonts/ARRrrrmoji-Web-Regular.woff2")
     format("woff2");
-  font-weight: 500;
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -128,9 +128,9 @@ body {
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border-default;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background-default text-foreground;
   }
 }

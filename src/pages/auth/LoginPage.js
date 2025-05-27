@@ -64,10 +64,11 @@ export default function Login() {
         <form onSubmit={handleSubmit(handleLogin)} className="w-full space-y-4">
           <Input
             id="email"
+            name="email"
             type="email"
             placeholder="Enter your email"
             {...register("email")}
-            className={"pl-10 h-12 text-base"}
+            className={"pl-4 h-12 text-base"}
             StartIcon={<Mail className="h-6 w-6" />}
             error={errors.email}
             autoComplete="email"
@@ -77,7 +78,7 @@ export default function Login() {
             type="password"
             placeholder="Enter your password"
             {...register("password")}
-            className={"pl-10 h-12 text-base"}
+            className={"pl-4 h-12 text-base"}
             StartIcon={<Lock className="h-6 w-6" />}
             error={errors.password}
             autoComplete="password"

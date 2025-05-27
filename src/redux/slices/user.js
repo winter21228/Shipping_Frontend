@@ -1,12 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // utils
-import axios from "../../../utils/axios";
+import axios from "../../utils/axios";
 
 // ----------------------------------------------------------------------
 const initialState = {
   isLoading: false,
+  isSuccess: false,
+  shipments: [],
+  shipment: null,
+  shipmentId: null,
   error: null,
-  user,
+  user: null,
 };
 
 const slice = createSlice({
@@ -23,6 +27,26 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    setShipment(state, action) {
+      state.isLoading = false;
+      state.shipment = action.payload;
+    },
+    setRates(state, action) {
+      state.isLoading = false;
+      state.rates = action.payload;
+    },
+    setShipmentId(state, action) {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.shipmentId = action.payload;
+    },
+    setSuccess(state, action) {
+      state.isSuccess = action.payload;
+    },
+    setShipments(state, action) {
+      state.isLoading = false;
+      state.shipments = action.payload;
+    },
   },
 });
 
@@ -30,52 +54,81 @@ const slice = createSlice({
 export default slice.reducer;
 // ----------------------------------------------------------------------
 
-export const { startLoading, hasError } = slice.actions;
+export const {
+  startLoading,
+  hasError,
+  setShipment,
+  setRates,
+  setSuccess,
+  setShipmentId,
+  setShipments,
+} = slice.actions;
 
 // ----------------------------------------------------------------------
-export const register = createAsyncThunk(
-  "user/register",
-  async (data, { dispatch }) => {
-    dispatch(startLoading());
-    try {
-      const response = await axios.post("/api/auth/register", data);
-      if (response.status === 201) {
-        const { accessToken, user } = response.data.msg;
-        setSession(accessToken);
-        dispatch(loginSuccess(user));
-      }
-    } catch (error) {
-      dispatch(hasError(error));
-    }
-  }
-);
-
-export const googleLogin = createAsyncThunk("user/googleLogin", async () => {
-  axios.get("/auth/google");
-});
-
-// ----------------------------------------------------------------------
-export const login = createAsyncThunk(
-  "user/login",
-  async (data, { dispatch }) => {
-    dispatch(startLoading());
-    try {
-      const response = await axios.post("/api/auth/login", data);
-      if (response.status === 200) {
-        const { accessToken, user } = response.data.msg;
-        setSession(accessToken);
-        dispatch(loginSuccess(user));
-      }
-    } catch (error) {
-      dispatch(hasError(error));
-    }
-  }
-);
-
-export const logout = createAsyncThunk(
-  "user/logout",
+export const getProcessingShipments = createAsyncThunk(
+  "easypost/get-processing-list",
   async (_, { dispatch }) => {
-    setSession(null);
-    dispatch(logoutSuccess());
+    dispatch(startLoading());
+    try {
+      const response = await axios.get("/api/easypost/get-processing-list");
+      if (response.status === 200) {
+        const { shipments } = response.data.msg;
+        dispatch(setShipments(shipments));
+      }
+    } catch (error) {
+      dispatch(hasError(error));
+    }
+  }
+);
+
+export const createShipment = createAsyncThunk(
+  "easypost/create-shipment",
+  async (data, { dispatch }) => {
+    dispatch(startLoading());
+    try {
+      const response = await axios.post("/api/easypost/create-shipment", data);
+      if (response.status === 200) {
+        const { id } = response.data.msg;
+        dispatch(setShipmentId(id));
+      }
+    } catch (error) {
+      dispatch(hasError(error));
+    }
+  }
+);
+
+export const updateShipment = createAsyncThunk(
+  "easypost/update-shipment",
+  async ({ id, data }, { dispatch }) => {
+    dispatch(startLoading());
+    try {
+      const response = await axios.patch(
+        `/api/easypost/update-shipment/${id}`,
+        data
+      );
+      if (response.status === 200) {
+        const { id } = response.data.msg;
+        dispatch(setShipmentId(id));
+      }
+    } catch (error) {
+      dispatch(hasError(error));
+    }
+  }
+);
+
+export const getShipment = createAsyncThunk(
+  "easypost/get-a-shipment",
+  async (id, { dispatch }) => {
+    dispatch(startLoading());
+    try {
+      const response = await axios.get(`/api/easypost/get-shipment/${id}`);
+      if (response.status === 200) {
+        const { shipment, rates } = response.data.msg;
+        dispatch(setShipment(shipment));
+        dispatch(setRates(rates));
+      }
+    } catch (error) {
+      dispatch(hasError(error));
+    }
   }
 );

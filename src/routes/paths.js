@@ -18,6 +18,8 @@ export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   rates: path(ROOTS_DASHBOARD, "/rates"),
   ship: path(ROOTS_DASHBOARD, "/ship"),
+  reviewShip: (id) => path(ROOTS_DASHBOARD, `/ship/${id}`),
+  singleShipping: path(ROOTS_DASHBOARD, "/ship/single"),
   reports: path(ROOTS_DASHBOARD, "/reports"),
   settings: path(ROOTS_DASHBOARD, "/settings"),
 };

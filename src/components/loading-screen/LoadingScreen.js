@@ -3,13 +3,16 @@ import { motion } from "framer-motion";
 export default function LoadingScreen() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm dark:bg-gray-900/80">
-      <div className="relative">
+      <div className="relative w-24 h-24 flex items-center justify-center">
         {/* Outer spinning circle */}
         <motion.div
-          className="absolute inset-0 rounded-full border-4 border-primary-500/20"
-          animate={{
-            rotate: 360,
+          className="absolute w-full h-full rounded-full border-4 border-t-primary-500 border-primary-500/20"
+          style={{
+            borderRightColor: "transparent",
+            borderBottomColor: "transparent",
+            borderLeftColor: "transparent",
           }}
+          animate={{ rotate: 360 }}
           transition={{
             duration: 2,
             repeat: Infinity,
@@ -19,10 +22,13 @@ export default function LoadingScreen() {
 
         {/* Middle spinning circle */}
         <motion.div
-          className="absolute inset-2 rounded-full border-4 border-primary-500/30"
-          animate={{
-            rotate: -360,
+          className="absolute w-16 h-16 rounded-full border-4 border-t-primary-500 border-primary-500/30"
+          style={{
+            borderRightColor: "transparent",
+            borderBottomColor: "transparent",
+            borderLeftColor: "transparent",
           }}
+          animate={{ rotate: -360 }}
           transition={{
             duration: 1.5,
             repeat: Infinity,
@@ -32,10 +38,13 @@ export default function LoadingScreen() {
 
         {/* Inner spinning circle */}
         <motion.div
-          className="absolute inset-4 rounded-full border-4 border-primary-500/40"
-          animate={{
-            rotate: 360,
+          className="absolute w-8 h-8 rounded-full border-4 border-t-primary-500 border-primary-500/40"
+          style={{
+            borderRightColor: "transparent",
+            borderBottomColor: "transparent",
+            borderLeftColor: "transparent",
           }}
+          animate={{ rotate: 360 }}
           transition={{
             duration: 1,
             repeat: Infinity,
@@ -45,7 +54,7 @@ export default function LoadingScreen() {
 
         {/* Center dot */}
         <motion.div
-          className="absolute inset-6 rounded-full bg-primary-500"
+          className="absolute w-4 h-4 rounded-full bg-primary-500"
           animate={{
             scale: [1, 1.2, 1],
           }}
@@ -58,7 +67,7 @@ export default function LoadingScreen() {
 
         {/* Loading text */}
         <motion.div
-          className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-sm font-medium text-gray-600 dark:text-gray-300"
+          className="absolute -bottom-20 left-1/2 -translate-x-1/2 text-xxxxl font-extrabold text-gray-600 dark:text-gray-300"
           animate={{
             opacity: [0.5, 1, 0.5],
           }}

@@ -8,8 +8,10 @@ import {
   RegisterPage,
   ReportPage,
   SettingPage,
-  ShippingPage,
   ShippingRateCalculatorPage,
+  SingleShippingPage,
+  ShippingDashboardPage,
+  ReviewShippingPage,
 } from "./elements";
 
 import { initializeSuccess } from "../redux/slices/auth";
@@ -66,7 +68,7 @@ export default function Router() {
         })
       );
     }
-  }, [storageAvailable]);
+  }, [storageAvailable, dispatch]);
 
   useEffect(() => {
     initialize();
@@ -114,7 +116,14 @@ export default function Router() {
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         {
           path: "ship",
-          element: <ShippingPage />,
+          children: [
+            {
+              element: <Navigate to="/dashboard/ship" replace />,
+            },
+            { element: <ShippingDashboardPage />, index: true },
+            { path: "single", element: <SingleShippingPage /> },
+            { path: ":id", element: <ReviewShippingPage /> },
+          ],
         },
         {
           path: "rates",

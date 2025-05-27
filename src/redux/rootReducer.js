@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 // slices
 import authReducer from "./slices/auth";
+import userReducer from "./slices/user";
 
 // ----------------------------------------------------------------------
 export const createNoopStorage = () => ({
@@ -30,6 +31,7 @@ export const rootPersistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  user: userReducer,
 });
 
 export default rootReducer;

@@ -29,3 +29,22 @@ export const getDeliveryDateFormat = (isoString) => {
 
   return `${weekday} ${month}/${day} by ${formattedTime}`;
 };
+
+export const formatDate = (isoString) => {
+  const options = {
+    weekday: "long",
+    month: "numeric",
+    day: "numeric",
+    year: "2-digit",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/New_York",
+    timeZoneName: "short",
+  };
+
+  const formatted = new Intl.DateTimeFormat("en-US", options).format(
+    new Date(isoString)
+  );
+
+  return formatted;
+};

@@ -32,8 +32,15 @@ export const ShippingRateCalculatorPage = Loadable(
   lazy(() => import("../pages/dashboard/ShippingRateCalculator"))
 );
 
-export const ShippingPage = Loadable(
-  lazy(() => import("../pages/dashboard/Shipping"))
+// Shipping Pages
+export const ShippingDashboardPage = Loadable(
+  lazy(() => import("../pages/dashboard/Shipping/Dashboard"))
+);
+export const SingleShippingPage = Loadable(
+  lazy(() => import("../pages/dashboard/Shipping/Single"))
+);
+export const ReviewShippingPage = Loadable(
+  lazy(() => import("../pages/dashboard/Shipping/Review"))
 );
 
 export const ReportPage = Loadable(
