@@ -11,6 +11,7 @@ const initialState = {
   shipmentId: null,
   error: null,
   user: null,
+  downloadPDFLink: null,
 };
 
 const slice = createSlice({
@@ -43,6 +44,11 @@ const slice = createSlice({
     setSuccess(state, action) {
       state.isSuccess = action.payload;
     },
+    setPDFDownloadLink(state, action) {
+      state.downloadPDFLink = action.payload;
+      state.isLoading = false;
+      state.isSuccess = true;
+    },
     setShipments(state, action) {
       state.isLoading = false;
       state.shipments = action.payload;
@@ -61,6 +67,7 @@ export const {
   setRates,
   setSuccess,
   setShipmentId,
+  setPDFDownloadLink,
   setShipments,
 } = slice.actions;
 
@@ -74,6 +81,22 @@ export const getProcessingShipments = createAsyncThunk(
       if (response.status === 200) {
         const { shipments } = response.data.msg;
         dispatch(setShipments(shipments));
+      }
+    } catch (error) {
+      dispatch(hasError(error));
+    }
+  }
+);
+
+export const buyLabel = createAsyncThunk(
+  "easypost/buy-label",
+  async (data, { dispatch }) => {
+    dispatch(startLoading());
+    try {
+      const response = await axios.post("/api/easypost/buy-label", data);
+      if (response.status === 200) {
+        const { downloadPDFLink } = response.data.msg;
+        dispatch(setPDFDownloadLink(downloadPDFLink));
       }
     } catch (error) {
       dispatch(hasError(error));

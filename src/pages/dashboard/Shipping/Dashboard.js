@@ -78,17 +78,17 @@ function ShippingDashboardPage() {
         </div>
       </div>
 
-      <div className="flex flex-col border-y-2 border-x-none border-solid border-gray-200 divide-y-2 divide-solid divide-gray-200">
-        {shipments &&
-          shipments.length > 0 &&
-          shipments.map((shipment) => (
+      {shipments && shipments.length > 0 && (
+        <div className="flex flex-col border-y-2 border-x-none border-solid border-gray-200 divide-y-2 divide-solid divide-gray-200">
+          {shipments.map((shipment) => (
             <LabelItem
               key={shipment.id}
               label={shipment}
               onClick={() => handleItemClick(shipment.id)}
             />
           ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

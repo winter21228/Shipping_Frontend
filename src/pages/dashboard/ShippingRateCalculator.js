@@ -136,7 +136,6 @@ export default function ShippingRateCalculator() {
     defaultValues,
   });
 
-  console.log("errors", errors);
   const formData = watch();
 
   const validateSize = useMemo(() => {
@@ -205,7 +204,6 @@ export default function ShippingRateCalculator() {
   const handleGetRateQuote = async (data) => {
     setIsLoading(true);
     try {
-      console.log("first");
       const fromAddress =
         selected === "Create"
           ? {
@@ -263,7 +261,6 @@ export default function ShippingRateCalculator() {
         isSameAddress,
         isSaveAddress,
       };
-      console.log("shipmentDetails", shipmentDetails);
       const response = await axios.post(
         "/api/easypost/get-rate",
         shipmentDetails

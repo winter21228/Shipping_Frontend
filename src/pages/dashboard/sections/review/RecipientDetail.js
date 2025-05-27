@@ -14,7 +14,7 @@ function RecipientDetail({
   packageData,
   rubberStamp,
 }) {
-  const [isOpenDetail, setIsOpenDetail] = useState(false);
+  const [isOpenDetail, setIsOpenDetail] = useState(true);
   return (
     <div className="flex flex-col gap-8">
       <div>

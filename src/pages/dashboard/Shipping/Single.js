@@ -113,18 +113,22 @@ function SingleShippingPage() {
       .default("US"),
     rubberStamp1: Yup.string(),
     rubberStamp2: Yup.string(),
-    length: selectedPacketType.dimensionsRequired
-      ? Yup.string().required("This field is required")
-      : Yup.string(),
-    width: selectedPacketType.dimensionsRequired
-      ? Yup.string().required("This field is required")
-      : Yup.string(),
-    height: selectedPacketType.heightRequired
-      ? Yup.string().required("This field is required")
-      : Yup.string(),
-    pounds: selectedPacketType.weightRequired
-      ? Yup.string().required("This field is required")
-      : Yup.string(),
+    length:
+      selectedPackage === "Create" && selectedPacketType.dimensionsRequired
+        ? Yup.string().required("This field is required")
+        : Yup.string(),
+    width:
+      selectedPackage === "Create" && selectedPacketType.dimensionsRequired
+        ? Yup.string().required("This field is required")
+        : Yup.string(),
+    height:
+      selectedPackage === "Create" && selectedPacketType.heightRequired
+        ? Yup.string().required("This field is required")
+        : Yup.string(),
+    pounds:
+      selectedPackage === "Create" && selectedPacketType.weightRequired
+        ? Yup.string().required("This field is required")
+        : Yup.string(),
     ounces: Yup.string(),
     ...(isSavePackage && {
       packageNickName: Yup.string().required("This field is required"),
@@ -386,6 +390,16 @@ function SingleShippingPage() {
       shipToCountry: shipment?.shipToAddress?.country || "",
       rubberStamp1: shipment?.rubberStamp?.rubberStamp1 || "",
       rubberStamp2: shipment?.rubberStamp?.rubberStamp2 || "",
+      length: shipment?.package?.parcel?.length || "",
+      width: shipment?.package?.parcel?.width || "",
+      height: shipment?.package?.parcel?.height || "",
+      pounds:
+        toWeightObject(parseFloat(shipment?.package?.parcel?.weight)).pounds ||
+        "",
+      ounces:
+        toWeightObject(parseFloat(shipment?.package?.parcel?.weight)).ounces ||
+        "",
+      packageNickName: shipment?.package?.nickname || "",
     };
 
     // Add conditional shipFrom + return address if "Create"
@@ -413,20 +427,6 @@ function SingleShippingPage() {
           returnPhone: shipment?.shipFromAddress?.return_phoneNumber || "",
         });
       }
-    }
-
-    if (!shipment?.package?.isSavedPackage) {
-      Object.assign(newValues, {
-        length: shipment?.package?.parcel?.length || "",
-        width: shipment?.package?.parcel?.width || "",
-        height: shipment?.package?.parcel?.height || "",
-        pounds:
-          toWeightObject(parseFloat(shipment?.package?.parcel?.weight))
-            .pounds || "",
-        ounces:
-          toWeightObject(parseFloat(shipment?.package?.parcel?.weight))
-            .ounces || "",
-      });
     }
 
     if (shipment?.package?.isIncludeInsurance) {
@@ -606,39 +606,45 @@ function SingleShippingPage() {
               company: selectedShipFromAddress.return_company,
               phone: selectedShipFromAddress.return_phoneNumber,
             };
-      const parcel = {
-        weight: toOunces({
-          pounds: values.pounds ? parseFloat(values.pounds) : 0,
-          ounces: values.ounces ? parseFloat(values.ounces) : 0,
-        }),
-        ...(selectedPacketType.dimensionsRequired && {
-          width: parseFloat(values.width),
-          length: parseFloat(values.length),
-          ...(selectedPacketType.heightRequired && {
-            height: parseFloat(values.length),
-          }),
-        }),
-      };
-      const customsFormInfo = {
-        signer: values.customsInfo.signer,
-        customLineItems:
-          values.customsInfo.customLineItems.length > 0
-            ? values.customsInfo.customLineItems.map((item) => ({
-                ...item,
-                quantity: item.quantity ? parseFloat(item.quantity) : 0,
-                value: item.value ? parseFloat(item.value) : 0,
-                weight: toOunces({
-                  pounds: item.weight_pounds
-                    ? parseFloat(item.weight_pounds)
-                    : 0,
-                  ounces: item.weight_ounces
-                    ? parseFloat(item.weight_ounces)
-                    : 0,
+      const parcel =
+        selectedPackage === "Create"
+          ? {
+              weight: toOunces({
+                pounds: values.pounds ? parseFloat(values.pounds) : 0,
+                ounces: values.ounces ? parseFloat(values.ounces) : 0,
+              }),
+              ...(selectedPacketType.dimensionsRequired && {
+                width: parseFloat(values.width),
+                length: parseFloat(values.length),
+                ...(selectedPacketType.heightRequired && {
+                  height: parseFloat(values.length),
                 }),
-              }))
-            : [],
-        contents_type: packageContentType,
-      };
+              }),
+            }
+          : selectedPackage?.parcel;
+      const customsFormInfo =
+        selectedPackage === "Create"
+          ? {
+              signer: values.customsInfo.signer,
+              customLineItems:
+                values.customsInfo.customLineItems.length > 0
+                  ? values.customsInfo.customLineItems.map((item) => ({
+                      ...item,
+                      quantity: item.quantity ? parseFloat(item.quantity) : 0,
+                      value: item.value ? parseFloat(item.value) : 0,
+                      weight: toOunces({
+                        pounds: item.weight_pounds
+                          ? parseFloat(item.weight_pounds)
+                          : 0,
+                        ounces: item.weight_ounces
+                          ? parseFloat(item.weight_ounces)
+                          : 0,
+                      }),
+                    }))
+                  : [],
+              contents_type: packageContentType,
+            }
+          : selectedPackage?.customsForm;
 
       const data = {
         toAddress,

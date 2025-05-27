@@ -20,7 +20,6 @@ const createIntlCurrencyFormatInstance = ({
 };
 // Let's create some global INTL instances to reduce instances over all in the app
 export const formatCurrency = (v) => {
-  console.log("v", v);
   const num = Number(v);
   if (isNaN(num)) return "0.00";
   return createIntlCurrencyFormatInstance().format(num);
