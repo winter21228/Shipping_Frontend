@@ -1,38 +1,49 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+
 import { getMe } from "../../redux/slices/auth";
-import { COUNTRIES } from "../../utils/countries";
-import { convertOzToLbs } from "../../utils/methods/formatMethods";
+import { setShipment } from "../../redux/slices/user";
+
 import {
-  MAX_GIRTH_LENGTH,
-  MAX_WEIGHT,
-  MIN_HEIGHT,
-  MIN_LENGTH,
-  MIN_WIDTH,
-  PackageTypes,
-} from "../../utils/constant";
-import axios from "../../utils/axios";
-import {
-  PackageDimensions,
-  PackageTypeSelector,
-  PackageWeight,
+  PackageSelector,
   RateList,
   ShipFromSelector,
   ShipToSelector,
 } from "./sections/rates";
+import PackageTypeSubform from "./sections/rates/PacketTypeSubform";
+
+import { COUNTRIES } from "../../utils/countries";
+import axios from "../../utils/axios";
+import { PACKET_TYPES_DATA } from "../../utils/packetTypes";
+import { getFilteredPackageTypes } from "../../utils/methods/getFilteredPacketTypes";
+import {
+  packageDimensions2d,
+  packageDimensions3d,
+  packageWeight,
+  validateDomesticOrInternational,
+} from "../../utils/validators";
+import { toOunces } from "../../utils/methods/formatWeight";
+
+import { PATH_DASHBOARD } from "../../routes/paths";
 
 // Main Page
 export default function ShippingRateCalculator() {
+  const packetTypes = getFilteredPackageTypes(PACKET_TYPES_DATA);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, isLoading: loading } = useSelector((state) => state.auth);
 
   const [selected, setSelected] = useState("Create");
+  const [selectedPackage, setSelectedPackage] = useState("Create");
   const [isSameAddress, setIsSameAddress] = useState(true);
   const [isSaveAddress, setIsSaveAddress] = useState(false);
-  const [selectedPacketType, setSelectedPacketType] = useState(PackageTypes[0]);
+  const [savedAddressId, setSavedAddressId] = useState("");
+  const [selectedPacketType, setSelectedPacketType] = useState(packetTypes[0]);
   const [rateList, setRateList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -63,15 +74,102 @@ export default function ShippingRateCalculator() {
       }
       return true;
     }),
-    length: selectedPacketType.predefined_package
-      ? Yup.string()
-      : Yup.string().required("Length is required"),
-    width: selectedPacketType.predefined_package
-      ? Yup.string()
-      : Yup.string().required("Width is required"),
-    height: Yup.string(),
-    pounds: Yup.string().required("Pounds is required"),
-    ounces: Yup.string().required("Ounces is required"),
+    length:
+      selectedPackage === "Create" && selectedPacketType.dimensionsRequired
+        ? Yup.string().required("This field is required")
+        : Yup.string(),
+    width:
+      selectedPackage === "Create" && selectedPacketType.dimensionsRequired
+        ? Yup.string().required("This field is required")
+        : Yup.string(),
+    height:
+      selectedPackage === "Create" && selectedPacketType.heightRequired
+        ? Yup.string().required("This field is required")
+        : Yup.string(),
+    pounds:
+      selectedPackage === "Create" && selectedPacketType.weightRequired
+        ? Yup.string().required("This field is required")
+        : Yup.string(),
+    ounces: Yup.string(),
+    combined3D: Yup.mixed().test("package-dimensions-3d", function () {
+      const { length, width, height, shipFromCountry, shipToCountry } =
+        this.parent;
+      if (
+        selectedPacketType.dimensionsRequired &&
+        selectedPacketType.heightRequired &&
+        length &&
+        width &&
+        height
+      ) {
+        const fromCountry =
+          selected === "Create" ? shipFromCountry : selected.country;
+        const config =
+          selectedPacketType?.limitConfig?.["3d"]?.[
+            validateDomesticOrInternational(fromCountry, shipToCountry)
+          ];
+        const error = packageDimensions3d(
+          {
+            length: parseFloat(length),
+            width: parseFloat(width),
+            height: parseFloat(height),
+          },
+          config
+        );
+        if (error) {
+          return this.createError({ message: error });
+        }
+      }
+      return true;
+    }),
+    combined2D: Yup.mixed().test("package-dimensions-2d", function () {
+      const { length, width, shipFromCountry, shipToCountry } = this.parent;
+      if (
+        selectedPacketType.dimensionsRequired &&
+        !selectedPacketType.heightRequired &&
+        length &&
+        width
+      ) {
+        const fromCountry =
+          selected === "Create" ? shipFromCountry : selected.country;
+        const config =
+          selectedPacketType?.limitConfig?.["2d"]?.[
+            validateDomesticOrInternational(fromCountry, shipToCountry)
+          ];
+        const error = packageDimensions2d(
+          {
+            length: parseFloat(length),
+            width: parseFloat(width),
+          },
+          config
+        );
+        if (error) {
+          return this.createError({ message: error });
+        }
+      }
+      return true;
+    }),
+    combinedWeight: Yup.mixed().test("package-weight", function () {
+      const { pounds, ounces, shipFromCountry, shipToCountry } = this.parent;
+      if (selectedPacketType.weightRequired && pounds) {
+        const fromCountry =
+          selected === "Create" ? shipFromCountry : selected.country;
+        const config =
+          selectedPacketType?.limitConfig?.["weight"]?.[
+            validateDomesticOrInternational(fromCountry, shipToCountry)
+          ];
+        const error = packageWeight(
+          {
+            weightPounds: parseFloat(pounds),
+            weightOunces: ounces ? parseFloat(ounces) : 0,
+          },
+          config
+        );
+        if (error) {
+          return this.createError({ message: error });
+        }
+      }
+      return true;
+    }),
     ...(selected === "Create" && {
       fullName: Yup.string(),
       company: Yup.string(),
@@ -138,69 +236,6 @@ export default function ShippingRateCalculator() {
 
   const formData = watch();
 
-  const validateSize = useMemo(() => {
-    const length = parseFloat(formData.length);
-    const width = parseFloat(formData.width);
-    const height = parseFloat(formData.height);
-    const girth = length + 2 * (height + width);
-
-    if (selectedPacketType.isHeight === "NOT") {
-      if (length < MIN_LENGTH || width < MIN_WIDTH) {
-        return {
-          isValid: false,
-          message: `Your envelope is too small! The minimum dimensions are ${MIN_LENGTH}x${MIN_WIDTH}″`,
-        };
-      }
-
-      if (length > 18 || width > 18)
-        return {
-          isValid: false,
-          message: `For envelopes larger than 18″ in either direction, you must use the box package type and enter all 3 dimensions of your final package`,
-        };
-    }
-
-    if (length < MIN_LENGTH || width < MIN_WIDTH || height < MIN_HEIGHT) {
-      return {
-        isValid: false,
-        message: `Your package is too small! The minimum dimensions are ${MIN_LENGTH}x${MIN_WIDTH}x${MIN_HEIGHT}″`,
-      };
-    }
-
-    if (girth > MAX_GIRTH_LENGTH)
-      return {
-        isValid: false,
-        message: `Your package is too big! The maximum Length plus Girth (Width x 2 + Height x 2) is ${MAX_GIRTH_LENGTH}″, but your package is ${girth}″`,
-      };
-
-    return null;
-  }, [
-    formData.length,
-    formData.width,
-    formData.height,
-    selectedPacketType.isHeight,
-  ]);
-
-  const validateWeight = useMemo(() => {
-    const pounds = parseFloat(formData.pounds);
-    const ounces = parseFloat(formData.ounces);
-
-    if (pounds + convertOzToLbs(ounces).lbs > MAX_WEIGHT)
-      return {
-        isValid: false,
-        message: `Maximum weight is ${MAX_WEIGHT} lb, you entered ${
-          pounds + convertOzToLbs(ounces).lbs
-        } lb${
-          convertOzToLbs(ounces).ounces
-            ? ` ${convertOzToLbs(ounces).ounces} oz`
-            : ""
-        }`,
-      };
-
-    return null;
-  }, [formData.pounds, formData.ounces]);
-
-  const packageTypeRef = useRef(null);
-
   const handleGetRateQuote = async (data) => {
     setIsLoading(true);
     try {
@@ -223,13 +258,13 @@ export default function ShippingRateCalculator() {
         street1: "",
         city: "",
         state: "",
-        zip: COUNTRIES.find((item) => item.code === data.shipToCountry)
+        zip: COUNTRIES.find((item) => item.value === data.shipToCountry)
           ?.isZipCode
           ? data.shipZipCode
           : "",
         phone: "",
         email: "",
-        country: data,
+        country: data.shipToCountry,
       };
       const returnAddress = {
         name: data.return_fullName,
@@ -241,17 +276,24 @@ export default function ShippingRateCalculator() {
         zip: data.return_zipCode,
         phone: data.return_phoneNumber,
       };
-      const parcel = {
-        ...(!selectedPacketType.predefined_package && {
-          length: parseFloat(data.length),
-          width: parseFloat(data.width),
-          height:
-            selectedPacketType.isHeight === "NOT" ? 1 : parseFloat(data.height),
-        }),
-        weight:
-          parseFloat(data.pounds) + convertOzToLbs(parseFloat(data.ounces)).lbs,
-        predefined_package: selectedPacketType.predefined_package,
-      };
+
+      const parcel =
+        selectedPackage === "Create"
+          ? {
+              weight: toOunces({
+                pounds: data.pounds ? parseFloat(data.pounds) : 0,
+                ounces: data.ounces ? parseFloat(data.ounces) : 0,
+              }),
+              ...(selectedPacketType?.dimensionsRequired && {
+                width: parseFloat(data.width),
+                length: parseFloat(data.length),
+                ...(selectedPacketType?.heightRequired && {
+                  height: parseFloat(data.length),
+                }),
+              }),
+            }
+          : selectedPackage?.parcel;
+
       const shipmentDetails = {
         nickName: data.nickName,
         toAddress: toAddress,
@@ -260,13 +302,15 @@ export default function ShippingRateCalculator() {
         returnAddress: returnAddress,
         isSameAddress,
         isSaveAddress,
+        selectedPacketType,
       };
       const response = await axios.post(
         "/api/easypost/get-rate",
         shipmentDetails
       );
-      const { rates } = response.data.msg;
+      const { rates, savedAddressId } = response.data.msg;
       setRateList(rates);
+      setSavedAddressId(savedAddressId);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -275,10 +319,74 @@ export default function ShippingRateCalculator() {
     }
   };
 
+  const handleShipNow = () => {
+    const shipmentData = {
+      shipToAddress: {
+        name: "",
+        street1: "",
+        city: "",
+        state: "",
+        zip: COUNTRIES.find((item) => item.value === formData.shipToCountry)
+          ?.isZipCode
+          ? formData.shipZipCode
+          : "",
+        phone: "",
+        email: "",
+        country: formData.shipToCountry,
+      },
+      shipFromAddressId: savedAddressId,
+      shipFromAddress: {
+        nickName: formData?.nickName,
+        fullName: formData?.fullName,
+        company: formData?.company,
+        addressline1: formData?.addressline1,
+        addressline2: formData?.addressline2,
+        city: formData?.city,
+        state: formData?.state,
+        zipCode: formData?.zipCode,
+        phoneNumber: formData?.phoneNumber,
+        isSavedAddress: isSaveAddress,
+        isSamePhysicalAndReturn: isSameAddress,
+        return_fullName: formData?.return_fullName,
+        return_company: formData?.return_company,
+        return_addressline1: formData?.return_addressline1,
+        return_addressline2: formData?.return_addressline2,
+        return_city: formData?.return_city,
+        return_state: formData?.return_state,
+        return_zipCode: formData?.return_zipCode,
+        return_phoneNumber: formData?.return_phoneNumber,
+      },
+      package: {
+        parcel:
+          selectedPackage === "Create"
+            ? {
+                weight: toOunces({
+                  pounds: formData.pounds ? parseFloat(formData.pounds) : 0,
+                  ounces: formData.ounces ? parseFloat(formData.ounces) : 0,
+                }),
+                ...(selectedPacketType.dimensionsRequired && {
+                  width: parseFloat(formData.width),
+                  length: parseFloat(formData.length),
+                  ...(selectedPacketType.heightRequired && {
+                    height: parseFloat(formData.length),
+                  }),
+                }),
+              }
+            : selectedPackage?.parcel,
+        packageType: selectedPacketType,
+      },
+    };
+    dispatch(setShipment(shipmentData));
+    navigate(PATH_DASHBOARD.singleShipping);
+  };
+
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-6">Quick Rate Quote</h1>
-      <form onSubmit={handleSubmit(handleGetRateQuote)}>
+      <form
+        onSubmit={handleSubmit(handleGetRateQuote)}
+        className="flex flex-col gap-4"
+      >
         <ShipFromSelector
           loading={loading}
           shippingAddress={user?.shippingAddress}
@@ -297,26 +405,23 @@ export default function ShippingRateCalculator() {
           errors={errors}
           country={formData.shipToCountry}
         />
-        <PackageTypeSelector
-          loading={loading}
-          selectedPacketType={selectedPacketType}
-          setSelectedPacketType={setSelectedPacketType}
-          PackageTypes={PackageTypes}
-          packageTypeRef={packageTypeRef}
-        />
-        <PackageDimensions
-          loading={loading}
-          selectedPacketType={selectedPacketType}
-          register={register}
-          errors={errors}
-          validateSize={validateSize}
-        />
-        <PackageWeight
-          loading={loading}
-          register={register}
-          errors={errors}
-          validateWeight={validateWeight}
-        />
+        {user?.packages.length > 0 && (
+          <PackageSelector
+            packages={user?.packages}
+            selected={selectedPackage}
+            setSelected={setSelectedPackage}
+          />
+        )}
+        {selectedPackage === "Create" && (
+          <PackageTypeSubform
+            loading={loading}
+            packageTypes={packetTypes}
+            selectedPacketType={selectedPacketType}
+            setSelectedPacketType={setSelectedPacketType}
+            register={register}
+            errors={errors}
+          />
+        )}
         <div className="flex justify-end">
           {loading ? (
             <div className="bg-white rounded-lg w-full flex justify-end animate-pulse">
@@ -326,7 +431,6 @@ export default function ShippingRateCalculator() {
             <div className="flex flex-col items-end">
               <button
                 type="submit"
-                disabled={validateSize || validateWeight}
                 className="bg-green hover:bg-greenButtonAccent text-white font-bold text-xl px-10 py-5 rounded-lg shadow-lg disabled:bg-gray-500"
               >
                 {isLoading ? "Getting Rate Quote..." : "Get Rate Quote*"}
@@ -338,7 +442,11 @@ export default function ShippingRateCalculator() {
           )}
         </div>
       </form>
-      <RateList isLoading={isLoading} rateList={rateList} />
+      <RateList
+        isLoading={isLoading}
+        rateList={rateList}
+        onShipNow={handleShipNow}
+      />
     </div>
   );
 }

@@ -4,16 +4,24 @@ import { cn } from "../../lib/util";
 
 const Select = React.forwardRef(
   (
-    { className, values = [], error, placeholder, showError = true, ...props },
+    {
+      className,
+      optionStyle,
+      values = [],
+      error,
+      placeholder,
+      showError = true,
+      ...props
+    },
     ref
   ) => {
     return (
-      <div className={`flex flex-col w-full`}>
+      <div className={`flex flex-col ${className}`}>
         <select
           className={cn(
-            "w-full border-2 rounded-md px-3 py-2",
+            "relative h-full w-full border-2 p-3 border-grey20 rounded-md text-base",
             error ? "border-red" : "",
-            className
+            optionStyle
           )}
           ref={ref}
           {...props}
@@ -22,15 +30,13 @@ const Select = React.forwardRef(
             {placeholder}
           </option>
           {values.map((s) => (
-            <option key={s.value} value={s.value}>
+            <option key={s.value} value={s.value} className="text-base">
               {s.label}
             </option>
           ))}
         </select>
         {error && showError && (
-          <p className="text-red text-xs mt-1 ml-1 text-right">
-            {error.message}
-          </p>
+          <p className="text-red text-end text-xs mt-1 ml-1">{error.message}</p>
         )}
       </div>
     );

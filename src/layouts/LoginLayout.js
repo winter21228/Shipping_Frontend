@@ -1,30 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Package } from "lucide-react";
+
 import { PATH_AUTH } from "../routes/paths";
 
 export default function LoginLayout({ children }) {
   return (
-    <div className="h-dvh flex flex-col w-full bg-white">
+    <div className="min-h-screen flex flex-col w-full bg-white">
       {/* Header */}
-      <header className="fixed w-full grow-0 z-10 flex items-center justify-between h-20 px-8 border-b bg-white">
-        <Link to="/" className="flex items-center space-x-2">
-          <Package className="h-8 w-8 text-black" />
-          <span className="text-2xl font-extrabold tracking-tight">
-            ShipSaver
-          </span>
-        </Link>
-        <nav className="hidden md:flex items-center space-x-8 text-base font-medium">
-          <Link to="#" className="font-bold text-xl hover:text-sky-500">
-            Rates
+      <header className="fixed w-full grow-0 z-10 flex items-center justify-around h-20 px-8 border-b bg-white">
+        <div className="flex flex-row items-center gap-8">
+          <Link to="/" className="flex items-center space-x-2 py-2 max-h-20">
+            <img src="/favicon/logo.png" alt="logo" className="h-16" />
           </Link>
-          <Link to="#" className="font-bold text-xl hover:text-sky-500">
-            Features
-          </Link>
-          <Link to="#" className="font-bold text-xl hover:text-sky-500">
-            Support
-          </Link>
-        </nav>
+          <nav className="hidden md:flex items-center space-x-8 text-base font-medium">
+            <Link to="#" className="font-bold text-xl hover:text-sky-500">
+              Rates
+            </Link>
+            <Link to="#" className="font-bold text-xl hover:text-sky-500">
+              Features
+            </Link>
+            <Link to="#" className="font-bold text-xl hover:text-sky-500">
+              Support
+            </Link>
+          </nav>
+        </div>
         <div className="flex items-center space-x-4">
           <Link
             to={PATH_AUTH.login}
@@ -42,12 +41,12 @@ export default function LoginLayout({ children }) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex w-full items-center justify-center px-2 py-8 bg-white mt-20">
+      <main className="flex-1 flex w-full items-center justify-center py-8 bg-white mt-20">
         {children}
       </main>
 
       {/* Footer */}
-      <footer className="w-full flex flex-col h-16 md:flex-row items-center justify-center md:justify-between px-8 py-6 border-t text-sm text-gray-500 space-y-2 md:space-y-0">
+      <footer className="w-full flex flex-col h-16 md:flex-row items-center justify-center md:justify-between px-8 py-6 text-sm border-t text-gray-500 bg-white space-y-2 md:space-y-0 z-20">
         <div className="flex space-x-4">
           <Link to="#" className="hover:underline">
             Privacy Policy

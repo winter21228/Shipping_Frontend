@@ -58,9 +58,6 @@ export default function Login() {
   return (
     <LoginLayout>
       <div className="w-full max-w-md flex flex-col items-center">
-        <h1 className="text-2xl md:text-3xl font-extrabold mb-6 mt-2 text-black text-center">
-          Ahoy, Captain!
-        </h1>
         <form onSubmit={handleSubmit(handleLogin)} className="w-full space-y-4">
           <Input
             id="email"
@@ -128,28 +125,6 @@ export default function Login() {
             </svg>
             <span className="text-black">Sign in with Google</span>
           </Button>
-
-          <div className="flex items-center justify-between mt-2">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="staySignedIn"
-                className="accent-blue-500 mr-2"
-              />
-              <label
-                htmlFor="staySignedIn"
-                className="text-sm font-medium text-black"
-              >
-                Stay signed in
-              </label>
-            </div>
-            <Link
-              to="/forgot-password"
-              className="text-sm text-gray-500 hover:underline"
-            >
-              Forgot Password
-            </Link>
-          </div>
         </form>
       </div>
     </LoginLayout>

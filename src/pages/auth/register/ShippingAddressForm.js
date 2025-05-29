@@ -98,7 +98,7 @@ export default function ShippingAddressForm({ data, onSubmit }) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-white">
+    <div className="flex flex-col md:flex-row bg-white">
       {/* Left: Form */}
       <div className="flex flex-col justify-center px-8 py-2 max-w-xl mx-auto">
         <h1 className="text-3xl font-bold mb-12">
@@ -309,12 +309,12 @@ export default function ShippingAddressForm({ data, onSubmit }) {
       {/* Right: Marketing */}
       <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-white to-blue-50">
         <div className="max-w-md text-center">
-          <h2 className="text-lg font-semibold mb-4">
-            Free shipping software to access the cheapest USPS<sup>®</sup> and
-            UPS<sup>®</sup> shipping rates available
+          <h2 className="text-2xl font-semibold mb-4">
+            Free shipping software to access the cheapest USPS<sup>®</sup>,
+            FedEx <sup>®</sup>, and UPS<sup>®</sup>shipping rates available
           </h2>
           <img
-            src="https://i.ibb.co/6bQ6Q6d/shipping-label-demo.png"
+            src="/favicon/logo.png"
             alt="Shipping software screenshot"
             className="mx-auto mb-4 rounded shadow"
             style={{ maxWidth: 350 }}

@@ -129,21 +129,14 @@ export default function RegisterForm({ data, onSaveData }) {
           className="w-48 h-48 mb-6"
         />
         <div className="text-left">
-          <h6 className="text-lg font-bold mb-2">
+          <h6 className="text-2xl font-bold mb-2">
             Access the cheapest shipping rates available
           </h6>
-          <ul className="text-base text-gray-700 space-y-2">
+          <ul className="text-lg text-gray-700 space-y-2">
             <li>📦 Up to 89% off USPS® rates</li>
             <li>📦 Up to 85% savings on UPS® rates</li>
             <li>🏅 No hidden fees, markup, or hidden costs</li>
-            <li>⭐ 4.9 aggregate reviews on Capterra with 990 reviews</li>
           </ul>
-          <p className="mt-4 text-sm">
-            Have any questions?{" "}
-            <Link href="#" className="text-blue-600 underline">
-              Live chat now
-            </Link>
-          </p>
         </div>
       </div>
     </div>

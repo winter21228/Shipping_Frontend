@@ -5,7 +5,7 @@ import { cn } from "../../lib/util";
 const Input = React.forwardRef(
   ({ className, type, StartIcon, error, showError = true, ...props }, ref) => {
     return (
-      <div className={`flex flex-col w-full`}>
+      <div className={`flex flex-col`}>
         <div className="flex flex-row">
           {StartIcon && (
             <div className="flex flex-row items-center p-3 bg-grey20 rounded-s-md">

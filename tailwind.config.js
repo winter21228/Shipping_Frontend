@@ -133,6 +133,9 @@ const config = {
         arrrrial: ['"ARRrrrialWeb"', "sans-serif"],
         arrrrrmo: ['"ARRrrrmoji-Web"', "sans-serif"],
       },
+      height: {
+        13: "52px",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

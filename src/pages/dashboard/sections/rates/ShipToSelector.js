@@ -5,7 +5,7 @@ import { COUNTRIES } from "../../../../utils/countries";
 
 export default function ShipToSelector({ loading, country, register, errors }) {
   const isZipCode = useMemo(
-    () => COUNTRIES.find((item) => item.code === country)?.isZipCode,
+    () => COUNTRIES.find((item) => item.value === country)?.isZipCode,
     [country]
   );
 
@@ -17,16 +17,16 @@ export default function ShipToSelector({ loading, country, register, errors }) {
           <div className="flex h-14 bg-gray-200 rounded w-full" />
         </div>
       ) : (
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row justify-start gap-4">
           <Select
             id="shipToCountry"
             placeholder="Country"
             values={COUNTRIES.map((item) => ({
               label: item.label,
-              value: item.code,
+              value: item.value,
             }))}
             {...register("shipToCountry")}
-            className={"h-12 text-base max-w-80"}
+            className={"h-13 text-sm max-w-80"}
             error={errors.shipToCountry}
             autoComplete="shipToCountry"
           />
@@ -35,7 +35,7 @@ export default function ShipToSelector({ loading, country, register, errors }) {
               id="shipZipCode"
               placeholder="ZipCode"
               {...register("shipZipCode")}
-              className="w-full border rounded h-12 text-sm bg-white shadow-sm max-w-80"
+              className="h-12 text-sm min-w-80 sm:max-w-80"
               error={errors.shipZipCode}
               autoComplete="shipZipCode"
             />

@@ -7,7 +7,7 @@ export default function PackageTypeSubformComponent({
   loading,
   setSelectedPacketType,
   selectedPacketType,
-  packetTypes,
+  packageTypes,
   register,
   errors,
 }) {
@@ -65,7 +65,7 @@ export default function PackageTypeSubformComponent({
           </button>
           {openPackageType && (
             <div className="w-full bg-white border border-sky-200 shadow-lg max-h-80 overflow-auto">
-              {packetTypes
+              {packageTypes
                 ?.filter(
                   (s) => s.packageTypeKey !== selectedPacketType?.packageTypeKey
                 )

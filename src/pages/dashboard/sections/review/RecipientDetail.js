@@ -107,12 +107,12 @@ function RecipientDetail({
                   )}
                 />
                 <TextWithLabel label={"Free Online Delivery Confirmation"} />
-                {packageData?.insurance && (
+                {packageData?.insurance ? (
                   <TextWithLabel
                     label={"Declared Package Value"}
                     value={formatCurrency(packageData?.insurance)}
                   />
-                )}
+                ) : null}
               </div>
             </div>
             <div className="flex flex-col gap-3 text-sm text-gray-400">

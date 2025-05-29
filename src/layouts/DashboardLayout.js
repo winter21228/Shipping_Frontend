@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { PATH_DASHBOARD } from "../routes/paths";
 import { useDispatch } from "react-redux";
@@ -51,15 +51,15 @@ export function DashboardLayout() {
             ${isCollapsed ? "py-4" : "py-8"}`}
         >
           <div
-            className={`bg-black rounded-full flex items-center justify-center mb-2 ${
+            className={`bg-white rounded-full flex items-center justify-center mb-2 ${
               isCollapsed ? "w-16 h-16" : "w-32 h-32"
             }`}
           >
-            {/* Logo here */}
-            {/* Replace with your logo */}
-            <span className={`${isCollapsed ? "text-6xl" : "text-9xl"}`}>
-              ☠️
-            </span>
+            <img
+              src="/favicon/logo.png"
+              alt="logo"
+              className={`${isCollapsed ? "w-14 h-14" : "w-28 h-28"}`}
+            />
           </div>
         </div>
         {/* Menu */}
@@ -120,24 +120,24 @@ export function DashboardLayout() {
             )}
           </button>
 
-          <div className="text-xs text-gray-400 text-center px-2">
+          <div className="text-xxs text-gray-400 text-center px-2">
             © 2014-2025. All Rights Reserved
             <br />
-            <a href="#" className="underline">
+            <Link href="#" className="underline">
               Privacy Policy
-            </a>{" "}
+            </Link>{" "}
             ·{" "}
-            <a href="#" className="underline">
+            <Link href="#" className="underline">
               Terms of Use
-            </a>{" "}
+            </Link>{" "}
             ·{" "}
-            <a href="#" className="underline">
+            <Link href="#" className="underline">
               Cookies Notice
-            </a>
+            </Link>
             <br />
-            <a href="#" className="underline">
+            <Link href="#" className="underline">
               Manage your Privacy & Data Settings
-            </a>
+            </Link>
           </div>
         </div>
       </aside>

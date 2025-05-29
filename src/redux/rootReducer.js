@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+import { persistReducer } from "redux-persist";
 // slices
 import authReducer from "./slices/auth";
 import userReducer from "./slices/user";
@@ -29,9 +30,16 @@ export const rootPersistConfig = {
   whitelist: [],
 };
 
+export const userPersistConfig = {
+  key: "user",
+  storage,
+  keyPrefix: "redux-",
+  whitelist: ["shipment"],
+};
+
 const rootReducer = combineReducers({
   auth: authReducer,
-  user: userReducer,
+  user: persistReducer(userPersistConfig, userReducer),
 });
 
 export default rootReducer;

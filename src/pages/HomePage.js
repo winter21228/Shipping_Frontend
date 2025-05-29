@@ -13,29 +13,33 @@ import { PATH_AUTH } from "../routes/paths";
 
 export default function Home() {
   return (
-    <div>
+    <div className="w-full">
       <section className="py-20 bg-gradient-to-b from-white to-gray-50">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-40 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Save up to 89% off USPS® & UPS® rates
+            <span className="bg-yellow h-10 rounded-t-3xl rounded-b-3xl">
+              Save up to 89%
+            </span>{" "}
+            off USPS® & UPS® rates with our free shipping software
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 mb-10 max-w-3xl mx-auto">
             Our free shipping software helps you save money and time on every
             package you send.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
-            <Button size="lg" asChild>
-              <Link to={PATH_AUTH.register}>
-                Get Started for Free <ArrowRight className="ml-2 h-5 w-5" />
+            <Button
+              size="lg"
+              asChild
+              className="text-3xl font-bold text-white cursor-pointer"
+            >
+              <Link to={PATH_AUTH.register} className="bg-green py-10">
+                Create your FREE account <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link to="#how-it-works">See How It Works</Link>
-            </Button>
           </div>
-          <div className="bg-white p-8 rounded-xl shadow-lg max-w-4xl mx-auto">
+          <div className="bg-white p-8 rounded-xl shadow-lg max-w-screen-xl mx-auto">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot_10-FITXNZNIVi4qzFOC8E0yRtAY1hto05.png"
+              src="/assets/images/home/home.png"
               alt="ShipSaver Dashboard Preview"
               className="rounded-lg w-full border shadow-sm"
             />
@@ -44,9 +48,9 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20">
+      <section id="features" className="py-20 bg-grey90">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-bold text-white text-center mb-16">
             Everything you need to ship like a pro
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -84,78 +88,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Interactive Demo Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
-            See ShipSaver in Action
-          </h2>
-          <p className="text-xl text-gray-600 text-center mb-16 max-w-3xl mx-auto">
-            Our intuitive interface makes shipping packages quick and easy
-          </p>
-
-          <div className="relative max-w-5xl mx-auto">
-            {/* Central Dashboard Image */}
-            <div className="bg-white p-4 rounded-xl shadow-lg mb-8 z-10 relative">
-              <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot_10-FITXNZNIVi4qzFOC8E0yRtAY1hto05.png"
-                alt="ShipSaver Dashboard Interface"
-                className="rounded-lg w-full border shadow-sm"
-              />
-            </div>
-
-            {/* Surrounding Images with Captions */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-              <div className="bg-white p-3 rounded-lg shadow-md">
-                <img
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/63b58928d95cb83293ec8c2a_TT_white_2819_2_Lft--packages_ups_express_box_small-r-sharpen-p-500-TpG6BbAX4QzwI2jPUWy5kDxHrEVux1.webp"
-                  alt="UPS Express Shipping Box"
-                  className="rounded-lg w-full h-48 object-contain"
-                />
-                <p className="text-center mt-2 font-medium">
-                  Compare UPS & USPS rates
-                </p>
-              </div>
-
-              <div className="bg-white p-3 rounded-lg shadow-md">
-                <img
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/63b43e5f3f4615f15fa0e889_mTT_w_Plants_0Y8A8384_r3-r-p-500-zlnWForhrizS9AAZD5D9pYLJmnj12L.webp"
-                  alt="Eco-friendly Shipping"
-                  className="rounded-lg w-full h-48 object-contain"
-                />
-                <p className="text-center mt-2 font-medium">
-                  Eco-friendly options
-                </p>
-              </div>
-
-              <div className="bg-white p-3 rounded-lg shadow-md">
-                <img
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/63b589ac6afec60291eae99e_shipping_materials_packing_peanuts-p-800-a0j3cmHhQkwwqO4wPJMIYjPupzf0YI.webp"
-                  alt="Shipping Boxes with Labels"
-                  className="rounded-lg w-full h-48 object-contain"
-                />
-                <p className="text-center mt-2 font-medium">
-                  Track your shipments
-                </p>
-              </div>
-
-              <div className="bg-white p-3 rounded-lg shadow-md">
-                <img
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6679c6db5f9db913bbb9d2a3_mTT_w_Printers_0Y8A8361-desktop_printer-r_still-p-800.jpg-4N40HS5COrV7YNtefSTmv2tO3Llw3V.jpeg"
-                  alt="Label Printer"
-                  className="rounded-lg w-full h-48 object-contain"
-                />
-                <p className="text-center mt-2 font-medium">
-                  Print labels instantly
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Shipping Process Visualization */}
-      <section className="py-20">
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
             The Complete Shipping Solution
@@ -187,10 +121,7 @@ export default function Home() {
               </ul>
             </div>
             <div className="order-1 md:order-2 flex justify-center">
-              <div className="relative">
-                <div className="absolute -top-3 -left-3 bg-yellow-300 text-xs font-bold px-2 py-1 rounded-full">
-                  SAVE MONEY
-                </div>
+              <div>
                 <img
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/63b58928d95cb83293ec8c2a_TT_white_2819_2_Lft--packages_ups_express_box_small-r-sharpen-p-500-TpG6BbAX4QzwI2jPUWy5kDxHrEVux1.webp"
                   alt="UPS Express Shipping Box"
@@ -316,6 +247,76 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Interactive Demo Section */}
+      <section className="py-20 bg-grey90">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl text-white font-bold text-center mb-6">
+            See ShipSaver in Action
+          </h2>
+          <p className="text-xl text-gray-400 text-center mb-16 max-w-3xl mx-auto">
+            Our intuitive interface makes shipping packages quick and easy
+          </p>
+
+          <div className="relative max-w-5xl mx-auto">
+            {/* Central Dashboard Image */}
+            <div className="bg-white p-4 rounded-xl shadow-lg mb-8 z-10 relative">
+              <img
+                src="/assets/images/home/home.png"
+                alt="ShipSaver Dashboard Interface"
+                className="rounded-lg w-full border shadow-sm"
+              />
+            </div>
+
+            {/* Surrounding Images with Captions */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+              <div className="bg-white p-3 rounded-lg shadow-md">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/63b58928d95cb83293ec8c2a_TT_white_2819_2_Lft--packages_ups_express_box_small-r-sharpen-p-500-TpG6BbAX4QzwI2jPUWy5kDxHrEVux1.webp"
+                  alt="UPS Express Shipping Box"
+                  className="rounded-lg w-full h-48 object-contain"
+                />
+                <p className="text-center mt-2 font-medium">
+                  Compare UPS & USPS rates
+                </p>
+              </div>
+
+              <div className="bg-white p-3 rounded-lg shadow-md">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/63b43e5f3f4615f15fa0e889_mTT_w_Plants_0Y8A8384_r3-r-p-500-zlnWForhrizS9AAZD5D9pYLJmnj12L.webp"
+                  alt="Eco-friendly Shipping"
+                  className="rounded-lg w-full h-48 object-contain"
+                />
+                <p className="text-center mt-2 font-medium">
+                  Eco-friendly options
+                </p>
+              </div>
+
+              <div className="bg-white p-3 rounded-lg shadow-md">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/63b589ac6afec60291eae99e_shipping_materials_packing_peanuts-p-800-a0j3cmHhQkwwqO4wPJMIYjPupzf0YI.webp"
+                  alt="Shipping Boxes with Labels"
+                  className="rounded-lg w-full h-48 object-contain"
+                />
+                <p className="text-center mt-2 font-medium">
+                  Track your shipments
+                </p>
+              </div>
+
+              <div className="bg-white p-3 rounded-lg shadow-md">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6679c6db5f9db913bbb9d2a3_mTT_w_Printers_0Y8A8361-desktop_printer-r_still-p-800.jpg-4N40HS5COrV7YNtefSTmv2tO3Llw3V.jpeg"
+                  alt="Label Printer"
+                  className="rounded-lg w-full h-48 object-contain"
+                />
+                <p className="text-center mt-2 font-medium">
+                  Print labels instantly
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing Section */}
       <section id="pricing" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4 text-center">
@@ -343,12 +344,12 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+      <section id="how-it-works" className="py-20 bg-grey90">
+        <div className="container px-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-white text-center mb-16">
             How ShipSaver Works
           </h2>
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="w-full grid md:grid-cols-2 gap-16 items-center">
             <div>
               <ol className="space-y-8">
                 <StepItem
@@ -373,9 +374,9 @@ export default function Home() {
                 />
               </ol>
             </div>
-            <div className="bg-white p-4 rounded-xl shadow-lg">
+            <div className="bg-white rounded-xl shadow-lg">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot_10-FITXNZNIVi4qzFOC8E0yRtAY1hto05.png"
+                src="/assets/images/home/home.png"
                 alt="ShipSaver Dashboard Interface"
                 className="rounded-lg w-full border shadow-sm"
               />
@@ -385,7 +386,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-white">
+      <section className="pt-20 bg-primary text-grey90">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Ready to start saving on shipping?
@@ -394,9 +395,13 @@ export default function Home() {
             Join thousands of businesses and individuals who save time and money
             with ShipSaver.
           </p>
-          <Button size="lg" variant="secondary" asChild>
-            <Link to={PATH_AUTH.register}>
-              Create Your Free Account <ArrowRight className="ml-2 h-5 w-5" />
+          <Button
+            size="lg"
+            asChild
+            className="text-2xl font-bold text-white cursor-pointer"
+          >
+            <Link to={PATH_AUTH.register} className="bg-green py-10">
+              Create your FREE account <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
         </div>
@@ -433,8 +438,8 @@ function StepItem({ number, title, description }) {
         </div>
       </div>
       <div>
-        <h3 className="text-xl font-bold mb-1">{title}</h3>
-        <p className="text-gray-600">{description}</p>
+        <h3 className="text-xl font-bold mb-1 text-white">{title}</h3>
+        <p className="text-gray-500">{description}</p>
       </div>
     </li>
   );

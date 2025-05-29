@@ -190,7 +190,8 @@ export default function ShipFromSelector({
                     placeholder="State"
                     values={STATES}
                     {...register("state")}
-                    className={"h-12 text-base"}
+                    optionStyle={"h-13 text-base"}
+                    className={"max-w-80"}
                     error={errors.state}
                     autoComplete="state"
                   />
@@ -280,7 +281,8 @@ export default function ShipFromSelector({
                         placeholder="State"
                         values={STATES}
                         {...register("return_state")}
-                        className={"h-12 text-base"}
+                        optionStyle={"h-13 text-base"}
+                        className={"max-w-80"}
                         error={errors.return_state}
                         autoComplete="return_state"
                       />

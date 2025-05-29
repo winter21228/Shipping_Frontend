@@ -66,7 +66,9 @@ function SingleShippingPage() {
 
   useEffect(() => {
     dispatch(getMe());
-    dispatch(getShipment(currentShipmentId));
+    if (currentShipmentId) {
+      dispatch(getShipment(currentShipmentId));
+    }
   }, [dispatch, currentShipmentId]);
 
   useEffect(() => {
@@ -402,8 +404,14 @@ function SingleShippingPage() {
       packageNickName: shipment?.package?.nickname || "",
     };
 
+    const shipFromAddress = shipment?.shipFromAddressId
+      ? user?.shippingAddress?.find(
+          (item) => item.id === shipment?.shipFromAddressId
+        )
+      : shipment?.shipFromAddress;
+
     // Add conditional shipFrom + return address if "Create"
-    if (!shipment?.shipFromAddress?.isSavedAddress) {
+    if (!shipFromAddress?.isSavedAddress) {
       Object.assign(newValues, {
         shipFromFullName: shipment?.shipFromAddress?.fullName || "",
         shipFromCompany: shipment?.shipFromAddress?.company || "",
@@ -415,7 +423,7 @@ function SingleShippingPage() {
         shipFromPhone: shipment?.shipFromAddress?.phoneNumber || "",
       });
 
-      if (!shipment?.shipFromAddress?.isSamePhysicalAndReturn) {
+      if (!shipFromAddress?.isSamePhysicalAndReturn) {
         Object.assign(newValues, {
           returnFullName: shipment?.shipFromAddress?.return_fullName || "",
           returnCompany: shipment?.shipFromAddress?.return_company || "",
@@ -454,9 +462,7 @@ function SingleShippingPage() {
     setIsSavePackage(shipment?.package?.isSavedPackage || false);
     setIncludeRubberStamp(!!shipment?.rubberStamp);
     setSelectedShipFromAddress(
-      shipment?.shipFromAddress?.isSavedAddress
-        ? shipment?.shipFromAddress
-        : "Create"
+      shipFromAddress?.isSavedAddress ? shipFromAddress : "Create"
     );
     setSelectedPackage(
       shipment?.package?.isSavedPackage ? shipment?.package : "Create"
@@ -465,7 +471,7 @@ function SingleShippingPage() {
     setIsSameAddress(
       shipment?.shipFromAddress?.isSamePhysicalAndReturn ?? true
     );
-  }, [shipment, reset]);
+  }, [shipment, reset, user?.shippingAddress]);
 
   useEffect(() => {
     if (formValues.shipToCountry !== "US") {
@@ -481,64 +487,6 @@ function SingleShippingPage() {
       setValue("customsInfo.signer", selectedShipFromAddress.fullName);
     }
   }, [formValues.shipFromFullName, selectedShipFromAddress, setValue]);
-
-  useEffect(() => {
-    const autoComplete = new window.google.maps.places.Autocomplete(
-      document.querySelector('[name="shipToAddress1"]')
-    );
-    autoComplete.addListener("place_changed", () => {
-      const place = autoComplete.getPlace();
-      if (!place.geometry || !place.geometry.location) {
-        // User entered the name of a Place that was not suggested and
-        // pressed the Enter key, or the Place Details request failed.
-        console.log("this location not available");
-      }
-      if (place.geometry.viewport || place.geometry.location) {
-        const addressComponents = place.address_components;
-        // Initialize variables to store the extracted information
-        let street_number = "";
-        let address = "";
-        let city = "";
-        let state = "";
-        let country = "";
-        let zip = "";
-        // Loop through all the address components
-        for (let i = 0; i < addressComponents.length; i += 1) {
-          const addressType = addressComponents[i].types[0];
-          // Extract the street_number
-          if (addressType === "street_number") {
-            street_number = addressComponents[i].long_name;
-          }
-          // Extract the address
-          if (addressType === "route") {
-            address = addressComponents[i].long_name;
-          }
-          // Extract the city
-          if (addressType === "locality" || addressType === "postal_town") {
-            city = addressComponents[i].long_name;
-          }
-          // Extract the state
-          if (addressType === "administrative_area_level_1") {
-            state = addressComponents[i].long_name;
-          }
-          // Extract the country
-          if (addressType === "country") {
-            country = addressComponents[i].long_name;
-          }
-          // Extract the zip code
-          if (addressType === "postal_code") {
-            zip = addressComponents[i].long_name;
-          }
-        }
-
-        setValue("shipToAddress1", `${street_number} ${address}`);
-        setValue("shipToCity", city);
-        setValue("shipToState", state);
-        setValue("shipToCountry", country);
-        setValue("shipToZipCode", zip);
-      }
-    });
-  }, [setValue]);
 
   const handleGetRate = (values) => {
     setIsLoading(true);
@@ -569,15 +517,15 @@ function SingleShippingPage() {
               phone: values.shipFromPhone,
             }
           : {
-              name: selectedShipFromAddress.fullName,
-              street1: selectedShipFromAddress.addressline1,
-              street2: selectedShipFromAddress.addressline2,
-              city: selectedShipFromAddress.city,
-              state: selectedShipFromAddress.state,
-              zip: selectedShipFromAddress.zipCode,
-              country: selectedShipFromAddress.country,
-              company: selectedShipFromAddress.company,
-              phone: selectedShipFromAddress.phoneNumber,
+              name: selectedShipFromAddress?.fullName,
+              street1: selectedShipFromAddress?.addressline1,
+              street2: selectedShipFromAddress?.addressline2,
+              city: selectedShipFromAddress?.city,
+              state: selectedShipFromAddress?.state,
+              zip: selectedShipFromAddress?.zipCode,
+              country: selectedShipFromAddress?.country,
+              company: selectedShipFromAddress?.company,
+              phone: selectedShipFromAddress?.phoneNumber,
             };
 
       const returnAddress =
@@ -625,9 +573,9 @@ function SingleShippingPage() {
       const customsFormInfo =
         selectedPackage === "Create"
           ? {
-              signer: values.customsInfo.signer,
+              signer: values.customsInfo?.signer,
               customLineItems:
-                values.customsInfo.customLineItems.length > 0
+                values.customsInfo?.customLineItems?.length > 0
                   ? values.customsInfo.customLineItems.map((item) => ({
                       ...item,
                       quantity: item.quantity ? parseFloat(item.quantity) : 0,
@@ -658,6 +606,7 @@ function SingleShippingPage() {
         isIncludeCustomsInfo,
         isSavePackage,
         selectedPacketType,
+        selectedShipFromAddress,
         addressNickName: values.nickName,
         packageName: values.packageNickName,
         includeRubberStamp,
@@ -679,6 +628,8 @@ function SingleShippingPage() {
       console.log("err", err);
     }
   };
+
+  console.log("errors", errors);
 
   return (
     <div className="p-8">
